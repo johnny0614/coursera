@@ -15,9 +15,7 @@ p = zeros(m, 1);
 %               You should set p to a vector of 0's and 1's
 %
 
-result = sigmoid(X*theta);
-result(result>=0.5) = [1];
-p = round(result);
+p = floor(sigmoid(X*theta)+0.5);
 
 % =========================================================================
 
