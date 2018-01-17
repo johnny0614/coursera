@@ -66,19 +66,27 @@ Theta2_grad = zeros(size(Theta2));
 % So it does not need any loop here to perform forward propgation
 
 X = [ones(m, 1) X];
+
 real_y = zeros(m, num_labels);
 for i = 1:m,
   real_y(i,y(i)) = 1;
 end
-y = real_y;
+
 Theta1_reg = Theta1;
 Theta1_reg(:,1) = 0;
 Theta2_reg = Theta2;
 Theta2_reg(:,1) = 0;
-activation_units = sigmoid(X*Theta1');
-activation_units = [ones(m, 1) activation_units];
-output_units = sigmoid(activation_units*Theta2');
-J = (1/m)*sum((-y.*log(output_units) - (1-y).*log(1-output_units))(:)) + lambda/(2*m)*(sum((Theta1_reg.^2)(:)) + sum((Theta2_reg.^2)(:)));
+
+z2 = X*Theta1';
+activation_units = sigmoid(z2);
+z3 = [ones(m, 1) activation_units]*Theta2';
+output_units = sigmoid(z3);
+J = (1/m)*sum((-real_y.*log(output_units) - (1-real_y).*log(1-output_units))(:)) + lambda/(2*m)*(sum((Theta1_reg.^2)(:)) + sum((Theta2_reg.^2)(:)));
+
+error_3 = output_units - real_y;
+error_2 = error_3*Theta2(:,2:end).*activation_units.*(1-activation_units);
+size(Theta1)
+size(Theta2)
 
 % -------------------------------------------------------------
 
