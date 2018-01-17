@@ -71,11 +71,14 @@ for i = 1:m,
   real_y(i,y(i)) = 1;
 end
 y = real_y;
+Theta1_reg = Theta1;
+Theta1_reg(:,1) = 0;
+Theta2_reg = Theta2;
+Theta2_reg(:,1) = 0;
 activation_units = sigmoid(X*Theta1');
 activation_units = [ones(m, 1) activation_units];
 output_units = sigmoid(activation_units*Theta2');
-output_units(1,:)
-J = (1/m)*sum((-y.*log(output_units) - (1-y).*log(1-output_units))(:));
+J = (1/m)*sum((-y.*log(output_units) - (1-y).*log(1-output_units))(:)) + lambda/(2*m)*(sum((Theta1_reg.^2)(:)) + sum((Theta2_reg.^2)(:)));
 
 % -------------------------------------------------------------
 
