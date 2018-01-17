@@ -62,23 +62,20 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% In the practice, the nn only has one hidden layer. 
+% So it does not need any loop here to perform forward propgation
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+X = [ones(m, 1) X];
+real_y = zeros(m, num_labels);
+for i = 1:m,
+  real_y(i,y(i)) = 1;
+end
+y = real_y;
+activation_units = sigmoid(X*Theta1');
+activation_units = [ones(m, 1) activation_units];
+output_units = sigmoid(activation_units*Theta2');
+output_units(1,:)
+J = (1/m)*sum((-y.*log(output_units) - (1-y).*log(1-output_units))(:));
 
 % -------------------------------------------------------------
 
