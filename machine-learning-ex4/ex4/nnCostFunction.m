@@ -65,8 +65,6 @@ Theta2_grad = zeros(size(Theta2));
 % In the practice, the nn only has one hidden layer. 
 % So it does not need any loop here to perform forward propgation
 
-X = [ones(m, 1) X];
-
 real_y = zeros(m, num_labels);
 for i = 1:m,
   real_y(i,y(i)) = 1;
@@ -77,16 +75,22 @@ Theta1_reg(:,1) = 0;
 Theta2_reg = Theta2;
 Theta2_reg(:,1) = 0;
 
-z2 = X*Theta1';
+% forward propagation
+z2 = [ones(m, 1) X]*Theta1';
 activation_units = sigmoid(z2);
 z3 = [ones(m, 1) activation_units]*Theta2';
 output_units = sigmoid(z3);
+
+% cost function
 J = (1/m)*sum((-real_y.*log(output_units) - (1-real_y).*log(1-output_units))(:)) + lambda/(2*m)*(sum((Theta1_reg.^2)(:)) + sum((Theta2_reg.^2)(:)));
 
+% calculate error term
 error_3 = output_units - real_y;
-error_2 = error_3*Theta2(:,2:end).*activation_units.*(1-activation_units);
-size(Theta1)
-size(Theta2)
+error_2 = (error_3*Theta2.*sigmoidGradient([ones(size(z2, 1), 1) z2]))(:,2:end);
+
+% calculate gradient
+Theta2_grad = (1/m)*(error_3'*[ones(m, 1) activation_units]) + (lambda/m)*Theta2_reg;
+Theta1_grad = (1/m)*(error_2'*[ones(m, 1) X]) + (lambda/m)*Theta1_reg;
 
 % -------------------------------------------------------------
 
