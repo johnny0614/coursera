@@ -65,10 +65,7 @@ Theta2_grad = zeros(size(Theta2));
 % In the practice, the nn only has one hidden layer. 
 % So it does not need any loop here to perform forward propgation
 
-real_y = zeros(m, num_labels);
-for i = 1:m,
-  real_y(i,y(i)) = 1;
-end
+real_y = eye(num_labels)(y,:);
 
 Theta1_reg = Theta1;
 Theta1_reg(:,1) = 0;
